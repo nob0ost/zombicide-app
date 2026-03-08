@@ -64,7 +64,10 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
+      - name: Terraform Plan
+        run: terraform plan 
+
       - name: Terraform Apply
         env:
           IMAGE_TAG: ${{ needs.build_and_push.outputs.image_tag }}
-        run: terraform apply -auto-approve -var="image_tag=${IMAGE_TAG}"
+        run: terraform apply -var="image_tag=${IMAGE_TAG}"
