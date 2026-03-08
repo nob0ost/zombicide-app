@@ -33,6 +33,9 @@ jobs:
           username: oauth
           password: ${{ env.OAUTH_TOKEN }}
 
+      - name: Extract application archive
+        run: tar -xzf zombicide_v.2.tar.gz
+
       - name: Build and push image
         run: |
           IMAGE_TAG="${{ steps.meta.outputs.image_tag }}"
