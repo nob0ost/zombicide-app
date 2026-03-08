@@ -43,7 +43,7 @@ resource "yandex_serverless_container" "zombicide-app" {
   name               = "zombicide-app"
   memory             = 512
   cores              = 2
-  service_account_id = yandex_iam_service_account.zombicide-sa
+  service_account_id = yandex_iam_service_account.zombicide-sa.id
   image {
     url = "cr.yandex/crpc043hc46bmegqv1dm/zombicide-app:${var.image_tag}"
   }
