@@ -7,6 +7,12 @@ terraform {
   required_version = ">= 0.13"
 }
 
+provider "yandex" {
+  cloud_id  = var.cloud_id
+  folder_id = var.folder_id
+  zone      = "ru-central1-a"
+}
+
 resource "yandex_iam_service_account" "zombicide-sa" {
   name      = "zombicide-sa"
 }
@@ -14,11 +20,13 @@ resource "yandex_iam_service_account" "zombicide-sa" {
 resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-uploader" {
   role      = "storage.uploader"
   member    = "serviceAccount:${yandex_iam_service_account.zombicide-sa.id}"
+  folder_id = var.folder_id
 }
 
 resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-viewer" {
   role      = "storage.viewer"
   member    = "serviceAccount:${yandex_iam_service_account.zombicide-sa.id}"
+  folder_id = var.folder_id
 }
 
 resource "yandex_storage_bucket" "zombicide-app-bucket" {
