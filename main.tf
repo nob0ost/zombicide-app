@@ -13,7 +13,7 @@ resource "yandex_iam_service_account" "zombicide-sa" {
 
 resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-uploader" {
   role      = "storage.uploader"
-  member    = "serviceAccount:${yandex_iam_service_account.sa.id}"
+  member    = "serviceAccount:${yandex_iam_service_account.zombicide-sa.id}"
 }
 
 resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-viewer" {
@@ -27,7 +27,7 @@ resource "yandex_storage_bucket" "zombicide-app-bucket" {
 }
 
 resource "yandex_storage_object" "zombicide-mount-path" {
-  bucket = yandex_storage_bucket.zombicide-app-bucket.name
+  bucket = "zombicide-app-bucket"
   key    = "/app/saves"
 }
 
@@ -42,7 +42,7 @@ resource "yandex_serverless_container" "zombicide-app" {
     mount_point_path = "/app/saves"
     mode             = "rw"
     object_storage {
-      bucket = yandex_storage_bucket.zombicide-app-bucket.name
+      bucket = "zombicide-app-bucket"
       prefix = ""
     }
   }
