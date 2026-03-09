@@ -25,10 +25,7 @@ resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-storage-upload
 
 resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-storage-viewer" {
   role      = "storage.viewer"
-  member    = [
-    "serviceAccount:${yandex_iam_service_account.zombicide-sa.id}",
-    "userAccount:ajek0f0kuknef20en786",
-  ]
+  member    = "serviceAccount:${yandex_iam_service_account.zombicide-sa.id}",
   folder_id = var.folder_id
 }
 
@@ -42,6 +39,14 @@ resource "yandex_storage_bucket" "zombicide-app-bucket" {
   bucket    = "zombicide-app-bucket"
   max_size  = 1073741824
   folder_id = var.folder_id
+}
+
+resource "yandex_storage_bucket_iam_binding" "zombicide_bucket_access" {
+  bucket = yandex_storage_bucket.zombicide-app-bucket.bucket
+  role = "storage.viewer"
+  members = [
+    "userAccount:ajek0f0kuknef20en786",
+  ]
 }
 
 resource "yandex_storage_object" "zombicide-mount-path" {
