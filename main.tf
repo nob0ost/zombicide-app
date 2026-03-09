@@ -18,13 +18,7 @@ resource "yandex_iam_service_account" "zombicide-sa" {
 }
 
 resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-storage-uploader" {
-  role      = "storage.uploader"
-  member    = "serviceAccount:${yandex_iam_service_account.zombicide-sa.id}"
-  folder_id = var.folder_id
-}
-
-resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-storage-viewer" {
-  role      = "storage.viewer"
+  role      = "storage.editor"
   member    = "serviceAccount:${yandex_iam_service_account.zombicide-sa.id}"
   folder_id = var.folder_id
 }
@@ -35,7 +29,13 @@ resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-registry-pulle
   folder_id = var.folder_id
 }
 
+resource "yandex_iam_service_account_static_access_key" "zombicide-sa-static-key" {
+  service_account_id = yandex_iam_service_account.zombicide-sa.id
+}
+
 resource "yandex_storage_bucket" "zombicide-app-bucket" {
+  access_key = yandex_iam_service_account_static_access_key.zombicide-sa-static-key.access_key
+  secret_key = yandex_iam_service_account_static_access_key.zombicide-sa-static-key.secret_key
   bucket     = "zombicide-app-bucket"
   max_size   = 1073741824
   folder_id  = var.folder_id
