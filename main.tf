@@ -35,23 +35,21 @@ resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-registry-pulle
   folder_id = var.folder_id
 }
 
-resource "yandex_storage_bucket" "zombicide-app-bucket" {
-  bucket    = "zombicide-app-bucket"
-  max_size  = 1073741824
-  folder_id = var.folder_id
+resource "yandex_iam_service_account_static_access_key" "zombicide-sa-static-key" {
+  service_account_id = yandex_iam_service_account.sombicide-sa.id
 }
 
-resource "yandex_storage_bucket_iam_binding" "zombicide_bucket_access" {
-  bucket = yandex_storage_bucket.zombicide-app-bucket.bucket
-  role = "storage.viewer"
-  members = [
-    "userAccount:ajek0f0kuknef20en786"
-  ]
+resource "yandex_storage_bucket" "zombicide-app-bucket" {
+  access_key = yandex_iam_service_account_static_access_key.zombicide-sa-static-key.access_key
+  secret_key = yandex_iam_service_account_static_access_key.zombicide-sa-static-key.secret_key
+  bucket     = "zombicide-app-bucket"
+  max_size   = 1073741824
+  folder_id  = var.folder_id
 }
 
 resource "yandex_storage_object" "zombicide-mount-path" {
   bucket  = "zombicide-app-bucket"
-  key     = "app/saves"
+  key     = "app/saves/"
   content = ""
 }
 
