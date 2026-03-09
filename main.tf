@@ -45,7 +45,7 @@ resource "yandex_storage_bucket_iam_binding" "zombicide_bucket_access" {
   bucket = yandex_storage_bucket.zombicide-app-bucket.bucket
   role = "storage.viewer"
   members = [
-    "userAccount:ajek0f0kuknef20en786",
+    "userAccount:ajek0f0kuknef20en786"
   ]
 }
 
