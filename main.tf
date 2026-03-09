@@ -45,6 +45,7 @@ resource "yandex_storage_object" "zombicide-mount-path" {
   bucket  = "zombicide-app-bucket"
   key     = "app/saves/"
   source  = "/dev/null"
+  depends_on = [yandex_storage_bucket.zombicide-app-bucket]
 }
 
 resource "yandex_serverless_container" "zombicide-app" {
@@ -62,5 +63,6 @@ resource "yandex_serverless_container" "zombicide-app" {
       bucket  = "zombicide-app-bucket"
     }
   }
+  depends_on = [yandex_storage_bucket.zombicide-app-bucket]
 }
 
