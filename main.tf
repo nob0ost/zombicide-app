@@ -17,19 +17,19 @@ resource "yandex_iam_service_account" "zombicide-sa" {
   name      = "zombicide-sa"
 }
 
-resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-uploader" {
+resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-storage-uploader" {
   role      = "storage.uploader"
   member    = "serviceAccount:${yandex_iam_service_account.zombicide-sa.id}"
   folder_id = var.folder_id
 }
 
-resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-viewer" {
+resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-storage-viewer" {
   role      = "storage.viewer"
   member    = "serviceAccount:${yandex_iam_service_account.zombicide-sa.id}"
   folder_id = var.folder_id
 }
 
-resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-viewer" {
+resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-registry-puller" {
   role      = "container-registry.images.puller"
   member    = "serviceAccount:${yandex_iam_service_account.zombicide-sa.id}"
   folder_id = var.folder_id
