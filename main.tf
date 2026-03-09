@@ -25,7 +25,7 @@ resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-storage-upload
 
 resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-storage-viewer" {
   role      = "storage.viewer"
-  member    = "serviceAccount:${yandex_iam_service_account.zombicide-sa.id}",
+  member    = "serviceAccount:${yandex_iam_service_account.zombicide-sa.id}"
   folder_id = var.folder_id
 }
 
