@@ -30,13 +30,15 @@ resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-viewer" {
 }
 
 resource "yandex_storage_bucket" "zombicide-app-bucket" {
-  bucket = "zombicide-app-bucket"
-  max_size = 1073741824
+  bucket    = "zombicide-app-bucket"
+  max_size  = 1073741824
+  folder_id = var.folder_id
 }
 
 resource "yandex_storage_object" "zombicide-mount-path" {
-  bucket = "zombicide-app-bucket"
-  key    = "/app/saves"
+  bucket  = "zombicide-app-bucket"
+  key     = "/app/saves"
+  content = ""
 }
 
 resource "yandex_serverless_container" "zombicide-app" {
@@ -52,7 +54,6 @@ resource "yandex_serverless_container" "zombicide-app" {
     mode             = "rw"
     object_storage {
       bucket = "zombicide-app-bucket"
-      prefix = ""
     }
   }
 }

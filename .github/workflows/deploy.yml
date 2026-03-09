@@ -72,4 +72,9 @@ jobs:
         run: terraform plan
 
       - name: Terraform Apply
+        id: apply
         run: terraform apply -auto-approve
+
+      - name: Terraform Destroy (on deploy failure)
+        if: failure()
+        run: terraform destroy -auto-approve
