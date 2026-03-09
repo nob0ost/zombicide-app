@@ -43,7 +43,7 @@ resource "yandex_storage_bucket" "zombicide-app-bucket" {
 
 resource "yandex_storage_object" "zombicide-mount-path" {
   bucket  = "zombicide-app-bucket"
-  key     = "/app/saves"
+  key     = "app/saves"
   content = ""
 }
 
@@ -56,11 +56,10 @@ resource "yandex_serverless_container" "zombicide-app" {
     url = "cr.yandex/crpc043hc46bmegqv1dm/zombicide-app:${var.image_tag}"
   }
   mounts {
-    mount_point_path = "app/saves"
+    mount_point_path = "/app/saves"
     mode             = "rw"
     object_storage {
       bucket  = "zombicide-app-bucket"
-      content = ""
     }
   }
 }
