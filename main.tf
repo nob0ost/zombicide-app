@@ -36,7 +36,7 @@ resource "yandex_resourcemanager_folder_iam_member" "zombicide-sa-registry-pulle
 }
 
 resource "yandex_iam_service_account_static_access_key" "zombicide-sa-static-key" {
-  service_account_id = yandex_iam_service_account.sombicide-sa.id
+  service_account_id = yandex_iam_service_account.zombicide-sa.id
 }
 
 resource "yandex_storage_bucket" "zombicide-app-bucket" {
