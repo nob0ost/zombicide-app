@@ -9,6 +9,7 @@ env:
   YC_FOLDER_ID: ${{ secrets.YC_FOLDER_ID }}
   OAUTH_TOKEN: ${{ secrets.OAUTH_TOKEN }}
   YC_REGISTRY_ID: crpc043hc46bmegqv1dm
+  SA_ID: ajeuod68tba59drd26un
 
 jobs:
   build_and_push:
@@ -56,17 +57,18 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Get YC IAM token
-        id: iam
+      - name: Write service account key
+        env:
+          YC_SA_KEY_JSON: ${{ secrets.YC_SA_KEY_JSON }}
         run: |
-          IAM_TOKEN=$(curl -s -X POST \
-            -H "Content-Type: application/json" \
-            -d "{\"yandexPassportOauthToken\":\"${OAUTH_TOKEN}\"}" \
-            https://iam.api.cloud.yandex.net/iam/v1/tokens | jq -r '.iamToken')
-          echo "YC_TOKEN=$IAM_TOKEN" >> $GITHUB_ENV
+          mkdir -p .yc
+          echo "$YC_SA_KEY_JSON" > .yc/sa-key.json
 
       - name: Terraform Init
-        run: terraform init
+        run: |
+          terraform init \
+            -backend-config="access_key=${STATIC_KEY_ID}" \
+            -backend-config="secret_key=${STATIC_KEY_SECRET}"
 
       - name: Terraform Plan
         run: terraform plan
